@@ -6,7 +6,7 @@
   <title>Lista de Produtos</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-white text-[#1a1a1a] font-sans p-4 leading-relaxed text-left">
+<body class="bg-white text-[#1a1a1a] font-sans, arial, helvetica p-4 leading-relaxed text-left">
   <header class="flex flex-wrap items-center justify-between border-b border-gray-300 pb-2 mb-4">
     <h1 class="text-4xl font-bold text-[#333333] pb-2">Sua Lista de Compras</h1>
     <nav class="flex flex-wrap gap-5 w-full sm:w-auto mt-4 sm:mt-0">
@@ -38,7 +38,10 @@
     </div>
   </main>
 
-  <script>
+    <script src="produtos-tailwind.js"></script>
+
+  <script> //SÓ FUNCIONOU COM ISSO \/
+
     function getProdutos() {
       const produtos = localStorage.getItem('produtos');
       return produtos ? JSON.parse(produtos) : [];
@@ -100,5 +103,6 @@
       listarProdutos();
     }
   </script>
+
 </body>
 </html>
