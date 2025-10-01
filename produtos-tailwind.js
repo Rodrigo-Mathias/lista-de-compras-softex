@@ -1,20 +1,20 @@
-// Função para pegar produtos no localStorage ou retornar array vazio
+// ********** Função para pegar produtos no localStorage ou retornar array vazio
 function getProdutos() {
   const produtos = localStorage.getItem('produtos');
   return produtos ? JSON.parse(produtos) : [];
 }
 
-// Salvar produtos no localStorage
+// **** Salvar produtos no localStorage
 function salvarProdutos(produtos) {
   localStorage.setItem('produtos', JSON.stringify(produtos));
 }
 
-// Adicionar ou atualizar produto
+// ********** Adicionar ou atualizar produto
 function salvarProduto(produto) {
   let produtos = getProdutos();
 
   if (produto.id) {
-    // Atualizar produto 
+    // ****** Atualizar produto 
     produtos = produtos.map(p => (p.id === produto.id ? produto : p));
   } else {
     produto.id = Date.now().toString();
@@ -24,14 +24,14 @@ function salvarProduto(produto) {
   salvarProdutos(produtos);
 }
 
-    // Excluir produto
+    // ******* Excluir produto
     function excluirProduto(id) {
       let produtos = getProdutos();
       produtos = produtos.filter(p => p.id !== id);
       salvarProdutos(produtos);
     }
 
-// Preencher formulário
+// ********* Preencher formulário
 function carregarProduto(id) {
   const produtos = getProdutos();
   const produto = produtos.find(p => p.id === id);
@@ -46,7 +46,7 @@ function carregarProduto(id) {
   document.getElementById('validade').value = produto.validade;
 }
 
-// Lista de produtos
+// ********* Lista de produtos
 function listarProdutos() {
   const produtos = getProdutos();
   const tbody = document.querySelector('#tabelaProdutos tbody');
@@ -90,7 +90,7 @@ function listarProdutos() {
   });
 }
 
-// Formulário
+// ****** Formulário
 if (document.getElementById('formProduto')) {
   const urlParams = new URLSearchParams(window.location.search);
   const editId = urlParams.get('edit');
@@ -119,7 +119,8 @@ if (document.getElementById('formProduto')) {
   });
 }
 
-// Carrega os produtos para a tabela
+// ************* Carrega os produtos para a tabela
 if (document.getElementById('tabelaProdutos')) {
   listarProdutos();
+
 }
