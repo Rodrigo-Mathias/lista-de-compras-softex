@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista de Produtos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-white text-[#1a1a1a] font-sans p-4 leading-relaxed text-left">
+  <header class="flex flex-wrap items-center justify-between border-b border-gray-300 pb-2 mb-4">
+    <h1 class="text-4xl font-bold text-[#333333] pb-2">Sua Lista de Compras</h1>
+    <nav class="flex flex-wrap gap-5 w-full sm:w-auto mt-4 sm:mt-0">
+      <a href="index-tailwind.html" class="text-black text-lg font-medium hover:text-[#2f323d] hover:border-b-2 hover:border-[#3a3c45] pb-1">Início</a>
+      <a href="cadastro-tailwind.html" class="text-black text-lg font-medium hover:text-[#2f323d] hover:border-b-2 hover:border-[#3a3c45] pb-1">Cadastro de Produtos</a>
+      <a href="lista-tailwind.html" class="text-black text-lg font-medium hover:text-[#2f323d] hover:border-b-2 hover:border-[#3a3c45] pb-1">Lista de Produtos</a>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-[#303033] mb-6">Meus Produtos</h2>
+
+    <div class="overflow-x-auto">
+      <table id="tabelaProdutos" class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-100 text-gray-700 text-center">
+            <th class="py-3 px-6">Nome</th>
+            <th class="py-3 px-6">Preço</th>
+            <th class="py-3 px-6">Categoria</th>
+            <th class="py-3 px-6">Origem</th>
+            <th class="py-3 px-6">Lote</th>
+            <th class="py-3 px-6">Validade</th>
+            <th class="py-3 px-6">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm sm:text-base text-center">
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    function getProdutos() {
+      const produtos = localStorage.getItem('produtos');
+      return produtos ? JSON.parse(produtos) : [];
+    }
+
+    function excluirProduto(id) {
+      let produtos = getProdutos();
+      produtos = produtos.filter(p => p.id !== id);
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+    }
+
+    function listarProdutos() {
+      const produtos = getProdutos();
+      const tbody = document.querySelector('#tabelaProdutos tbody');
+      tbody.innerHTML = '';
+
+      produtos.forEach(produto => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td class="py-3 px-6">${produto.nome}</td>
+          <td class="py-3 px-6">R$ ${parseFloat(produto.preco).toFixed(2)}</td>
+          <td class="py-3 px-6">${produto.categoria}</td>
+          <td class="py-3 px-6">${produto.origem}</td>
+          <td class="py-3 px-6">${produto.lote}</td>
+          <td class="py-3 px-6">${produto.validade ? produto.validade.split('-').reverse().join('/') : ''}</td>
+          <td class="py-3 px-6 flex gap-2 justify-center">
+            <button class="editar bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-1 px-3 rounded-md shadow transition" data-id="${produto.id}">
+              Editar
+            </button>
+            <button class="excluir bg-red-500 hover:bg-red-600 text-white text-sm font-medium py-1 px-3 rounded-md shadow transition" data-id="${produto.id}">
+              Excluir
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      document.querySelectorAll('.editar').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = e.target.dataset.id;
+          window.location.href = `cadastro-tailwind.html?edit=${id}`;
+        });
+      });
+
+      document.querySelectorAll('.excluir').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = e.target.dataset.id;
+          if (confirm('Confirma exclusão deste produto?')) {
+            excluirProduto(id);
+            listarProdutos();
+          }
+        });
+      });
+    }
+
+    if (document.getElementById('tabelaProdutos')) {
+      listarProdutos();
+    }
+  </script>
+</body>
+</html>
